@@ -23,6 +23,8 @@ pip install -r requirements.txt
 
 Pastikan Anda menjalankannya dari direktori root proyek (folder utama repositori)
 
+---
+
 ## 🚀 Menjalankan Aplikasi
 
 ### 1. Menjalankan Server FastAPI
