@@ -31,7 +31,7 @@ Pastikan Anda menjalankannya dari direktori root proyek (folder utama repositori
 
 Buka terminal pertama, lalu jalankan perintah berikut dari direktori root proyek:
 ```
-uvicorn main:app --host 0.0.0.0 --port 8000
+uvicorn server.server_api:app --host 0.0.0.0 --port 8000
 ```
 Server FastAPI akan aktif dan dapat diakses melalui http://0.0.0.0:8000 atau http://localhost:8000
 
