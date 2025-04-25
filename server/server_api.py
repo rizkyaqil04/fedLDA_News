@@ -12,15 +12,17 @@ NUM_CLIENTS = 3
 REQUIRED_UPDATES = NUM_CLIENTS
 MAX_ROUNDS = 5
 UPDATE_ROUND = 0
+VOCAB_SIZE = 1000
 
-server = Server(num_topics=5, vocab_size=1000, beta=0.01)
+server = Server(num_topics=5, vocab_size=VOCAB_SIZE, beta=0.01)
 update_buffer = []
 clients_updated = set()
 phi_history = []
 
-# Global vocab (dari 20newsgroups)
-vectorizer = CountVectorizer(max_features=1000, stop_words='english')
-vectorizer.fit(fetch_20newsgroups(subset='train', remove=('headers', 'footers', 'quotes')).data)
+# Testing vocab (dari 20newsgroups)
+test_data = fetch_20newsgroups(subset='test', remove=('headers', 'footers', 'quotes')).data
+vectorizer = CountVectorizer(max_features=VOCAB_SIZE, stop_words='english')
+vectorizer.fit(test_data)
 vocab = vectorizer.get_feature_names_out()
 
 def extract_top_words(phi, vocab, top_n=5):
@@ -57,6 +59,11 @@ async def post_update(request: Request):
     if len(update_buffer) == REQUIRED_UPDATES:
         server.aggregate_updates(update_buffer)
         phi_history.append(server.phi.copy())
+
+        # Evaluasi coherence
+        texts = [[w for w in doc.lower().split() if w in set(vocab)] for doc in test_data]
+        coherence = server.evaluate_coherence(server.phi, vocab, texts)
+        print(f"[SERVER] Coherence Score (c_v): {coherence:.4f}")
 
         update_buffer.clear()
         clients_updated.clear()

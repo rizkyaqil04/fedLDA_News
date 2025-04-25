@@ -13,8 +13,10 @@ ALPHA = 0.1
 BETA = 0.01
 DELTA = 0.1
 TOPICS = 5
+DATA_SIZE = 100
 VOCAB_SIZE = 1000
-LOCAL_ITERATIONS = 100
+LOCAL_ITERATIONS = 10
+
 
 # Load data
 newsgroups = fetch_20newsgroups(subset='train', remove=('headers', 'footers', 'quotes'))
@@ -22,18 +24,12 @@ vectorizer = CountVectorizer(max_features=VOCAB_SIZE, stop_words='english')
 X = vectorizer.fit_transform(newsgroups.data)
 docs = X.toarray()
 
-doc_idxs = np.random.choice(X.shape[0], size=500, replace=False)
+doc_idxs = np.random.choice(X.shape[0], size=DATA_SIZE, replace=False)
 bow_vec = np.sum(X[doc_idxs].toarray(), axis=0)
 doc = []
 for word_id, count in enumerate(bow_vec):
     doc.extend([word_id] * count)
 np.random.shuffle(doc)
-
-# client_docs = np.array_split(docs, 3)[client_id]
-# doc = []
-# for word_id, count in enumerate(np.sum(client_docs, axis=0)):
-#     doc += [word_id] * count
-# np.random.shuffle(doc)
 
 client = Client(doc, TOPICS, VOCAB_SIZE, ALPHA, BETA)
 

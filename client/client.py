@@ -48,9 +48,9 @@ class Client:
         self.last_phi = phi.copy()
         return counts
 
-    def rrp_perturb(self, w, k1, k2, theta, phi, delta, eta):
+    def rrp_perturb(self, w, k, theta, phi, delta, eta):
         if np.random.rand() > eta:
-            return (w, k1, k2)
+            return (w, k)
 
         p_theta = normalize_or_uniform(theta)
         k_prime = np.random.choice(self.K, p=p_theta)
@@ -60,25 +60,25 @@ class Client:
 
         top_words = get_truncated_set(word_probs, delta)
         if w_prime in top_words:
-            return (w_prime, k1, k2)
+            return (w_prime, k)
         else:
-            return (w, k1, k2)
+            return (w, k)
 
     def perturb_update(self, counts, epsilon, delta=0.1):
         eta = 1 / (1 + np.exp(epsilon))
         tuples = []
 
-        for k in range(self.K):
+        for ks in range(self.K):
             for v in range(self.V):
-                c = counts[k, v]
+                c = counts[ks, v]
                 if c > 0:
                     for _ in range(c):
-                        tuples.append((v, -1, k))
+                        tuples.append((v, ks))
 
         perturbed = np.zeros((self.K, self.V), dtype=np.float64)
-        for (w, k1, k2) in tuples:
-            w_perturbed, _, _ = self.rrp_perturb(w, k1, k2, self.theta, self.last_phi, delta, eta)
-            perturbed[k2, w_perturbed] += 1
+        for (w, k) in tuples:
+            w_perturbed, _ = self.rrp_perturb(w, k, self.theta, self.last_phi, delta, eta)
+            perturbed[k, w_perturbed] += 1
 
         return perturbed
 
