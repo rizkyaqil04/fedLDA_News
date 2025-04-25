@@ -10,9 +10,9 @@ app = FastAPI()
 
 NUM_CLIENTS = 3
 REQUIRED_UPDATES = NUM_CLIENTS
-MAX_ROUNDS = 10
+MAX_ROUNDS = 5
 UPDATE_ROUND = 0
-VOCAB_SIZE = 10000
+VOCAB_SIZE = 1000
 
 server = Server(num_topics=5, vocab_size=VOCAB_SIZE, beta=0.01)
 update_buffer = []
