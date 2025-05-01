@@ -5,3 +5,4 @@ __pycache__/
 *.npy
 #*.json
 phi_logs/
+secrets/
