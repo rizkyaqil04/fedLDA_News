@@ -1,0 +1,59 @@
+# version: "3.9"
+services:
+  broker:
+    image: eclipse-mosquitto
+    container_name: mqtt-broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow
+    container_name: mlflow-server
+    ports:
+      - "5000:5000"
+    working_dir: /mlflow
+    volumes:
+      - ./mlflow_data:/mlflow
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:///mlflow.db
+      --default-artifact-root /mlflow/mlruns
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: fedlda-server
+    depends_on:
+      - broker
+      - mlflow
+    volumes:
+      - ./phi_logs:/app/phi_logs
+
+  client0:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: fedlda-client0
+    depends_on:
+      - broker
+
+  client1:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: fedlda-client1
+    depends_on:
+      - broker
+
+  client2:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: fedlda-client2
+    depends_on:
+      - broker

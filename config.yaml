@@ -1,0 +1,21 @@
+# config.yaml
+
+global:
+  vocab_size: 1000
+  num_topics: 5
+  max_rounds: 5
+  num_clients: 3
+  broker: "mqtt-broker"
+  port: 1883
+
+server:
+  beta: 0.01
+  registration_window: 120
+
+client:
+  data_size: 100
+  alpha: 0.1
+  beta: 0.01
+  epsilon: 1.0
+  delta: 0.1
+  local_iterations: 50

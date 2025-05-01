@@ -1,0 +1,6 @@
+outs:
+- md5: 88f77db3c379de9d76ab39702731f652.dir
+  size: 565046
+  nfiles: 6
+  hash: md5
+  path: phi_logs

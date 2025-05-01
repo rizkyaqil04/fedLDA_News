@@ -5,4 +5,6 @@ numpy
 matplotlib
 requests
 wordcloud
-
+paho-mqtt
+mlflow
+gensim
