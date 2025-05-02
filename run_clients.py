@@ -1,10 +1,7 @@
 import subprocess
 
-client_processes = []
-for i in range(3):
-    proc = subprocess.Popen(["python", "client/main.py"])
-    client_processes.append(proc)
+filenames = ["data1.json", "data2.json", "data3.json"]
 
-for proc in client_processes:
-    proc.wait()
+for fname in filenames:
+    subprocess.Popen(["python", "client/main.py", fname])
 
