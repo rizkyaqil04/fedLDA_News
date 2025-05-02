@@ -1,5 +1,5 @@
-fastapi
-uvicorn
+# fastapi
+# uvicorn
 scikit-learn
 numpy
 matplotlib

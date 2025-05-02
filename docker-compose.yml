@@ -41,6 +41,10 @@ services:
     container_name: fedlda-client0
     depends_on:
       - broker
+      - server
+    volumes:
+      - ./client/data:/app/client/data
+    command: ["python", "main.py", "data1.json"]
 
   client1:
     build:
@@ -49,6 +53,10 @@ services:
     container_name: fedlda-client1
     depends_on:
       - broker
+      - server
+    volumes:
+      - ./client/data:/app/client/data
+    command: ["python", "main.py", "data2.json"]
 
   client2:
     build:
@@ -57,3 +65,7 @@ services:
     container_name: fedlda-client2
     depends_on:
       - broker
+      - server
+    volumes:
+      - ./client/data:/app/client/data
+    command: ["python", "main.py", "data3.json"]

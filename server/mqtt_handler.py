@@ -61,6 +61,8 @@ def setup_mqtt():
     client.message_callback_add(TOPIC_REGISTER, on_registration)
     client.message_callback_add(TOPIC_UPDATE, on_update)
     client.loop_start()
+
+    client.publish("fedlda/registration_status", json.dumps({ "status": "open" }))
     return client
 
 def close_registration(client):
@@ -68,6 +70,8 @@ def close_registration(client):
     time.sleep(REGISTRATION_WINDOW)
     registration_open = False
     print(f"[SERVER] Registration closed with {len(registered_clients)} clients.")
+
+    client.publish("fedlda/registration_status", json.dumps({ "status": "closed" }))
 
     time.sleep(2)
     client.publish(TOPIC_GLOBAL_PHI, json.dumps({
